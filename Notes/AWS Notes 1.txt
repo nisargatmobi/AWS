@@ -1,0 +1,452 @@
+Who is AWS developer?
+AWS Developer is responsible for designing, deploying, and developing cloud applications on AWS platform.
+
+What is AWS cloud Infrastructure?
+need to deploy your application workloads across the globe in a single click.
+deploy specific applications closer to your end-users.
+
+what is AWS regions?
+cluster of data centres. and data centers are nothing but  Availability zones.
+
+what is AWS AZ's ?
+An Availability Zone (AZ) is one or more discrete data centers with redundant power, networking,
+and connectivity in an AWS Region.
+
+why concept of AZ's?
+All AZ’s in an AWS Region are interconnected with high-bandwidth, low-latency networking.
+for customers who need for low fault tolerance and low latency.
+
+what is AWS Local Zones?
+are places which provides  compute, storage, database, and other select AWS services closer to end-users.
+
+what is AWS Wavelength?
+use of bandwidth and latency advancements of 5G.
+
+what is AWS service?
+global cloud-based products including compute, storage, database, analytics, networking, machine learning
+and AI, mobile, developer tools, IoT, security, enterprise applications, and much more.
+
+latest data of AWS regions and AZ
+: https://aws.amazon.com/about-aws/global-infrastructure/
+
+What is EC2 instance?
+is a virtual server which we are using for our application.
+
+what is SSH key?
+is a password for our created instance.
+
+SSH works on?
+mac and linux.
+
+what is EC2 instance connect?
+allows us to connect to our instance through a web browser which is running on a OS.
+
+what is SSH ?
+functionality allows us to connect to remote machine through command line.
+
+How to SSH into your EC2 instance?   for MAC OS
+step 1 : already saved IPv4 IP Address , get it copied when you create it for first time.
+step 2 : note down the port as well
+step 3 : go on terminal of your local machine
+step 4 : ssh ec2-user@35.180.100.144
+       : part before @ is computer user on your AWS machine
+       : part after @ is IPv4 address
+step 5 : continue ? yes
+step 6 : now go inside the folder which contains SSH key and
+       : ssh -i EC2Tutorial.pem  ec2-user@35.180.100.144
+       : here EC2Tutorial.pem is a file containing key.
+step 7 : unprotected private key will appear
+step 8 : chmod 0400 EC2Tutorial.pem
+step 9 : https://aws.amazon.com/......   will appear.
+
+
+why unprotected private key error?
+when we create instance for first time then key will be generated and downloadable.
+now permission to this file is 0644 meaning anyone access this file.
+so change access permission to 0400 meaning only you can access this file.
+
+how to logout from my AWS instance?
+control D
+
+SSH There's a connection timeout
+: security group must have a port range of instance.
+
+SSH There's a connection refused
+: restart the instance. if doesn't work, create a new one.
+
+SSH Permission denied (publickey,gssapi-keyex,gssapi-with-mic)
+:wrong security key or wrong user.
+:Make sure you have started an Amazon Linux 2 EC2 instance, and make sure you're using the user ec2-user.
+
+
+
+why EC2 IP address is changed on stop and start?
+As per AWS, when an instance is launched in EC2-Classic, it is automatically assigned a public IP address to
+the instance from the EC2-Classic public IPv4 address pool.
+so when we stop the instance the IP is returned to pool so that it can be used by any other
+instance.
+
+what is stop and start?
+Stop and Restart - When you stop a server in RightScale, the associated instance is actually
+terminated. Therefore, when you restart the server, another virtual machine instance will
+be provisioned to you,so it will have new and different public(unless it was allocated an
+elastic ip) and private IP addresses.
+
+what is relaunch?
+Relaunch - When you relaunch a server, the running instance is terminated and a new instance
+is launched in its place.
+
+what is reboot?
+Reboot - When you perform a reboot, the same virtual machine instance is rebooted. The original
+virtual machine instance that was provisioned to you is never returned back to Amazon.
+The public IP address will not change.
+
+
+why EBS volume is locked to an AZ only?
+Possible reason to this is because of the fact that EBS Volumes are present outside of the host
+machine and instances have to be connected over the network, if the EBS Volumes are present outside
+the Availability Zone there can be potential latency issues and subsequent performance degradation.
+
+
+
+RWS Hands On :
+
+    RWS console
+        databases
+            create databases
+                Standard Create
+                engine Options
+                templates
+                    free tier
+                settings
+                    name of db
+                    username
+                    password
+                Instance size
+                storage
+                availability and durability
+                connectivity
+                    default
+                    additional connectivity configuration.
+                        accessible publicly
+                    preference : AZ
+                    port
+                    monitoring : left unchecked
+                    log exprots : leave unchecked
+            Create Database
+
+        Instances
+            connect
+                Endpoint : address of db on server
+            Instance Actions
+                stop
+                reboot
+                create read replica
+                take snapshot
+
+
+
+Elastic Cache Hands On :
+    ElasticCache console
+        get started now
+            custer engine
+                redis
+            redis setting
+                node type
+                    select t2 as it is free
+            Advance redis setting
+                subnet group
+                    create new
+                name
+                description
+                VPC id :  keep as it is
+                subnets: AZ we want
+            security
+                encription at rest
+                encription in transit
+            import data to cluster .
+            backup .
+            maintenance .
+            create
+    Redis
+        we can see created redis cache
+
+
+S3  Hands On :
+    S3 console
+        create bucket
+            name and region
+                 name : thebucketofnisarg
+                 region
+                 copy settings .
+            config options
+                .
+            review
+            create bucket
+
+    S3 console : bucket will be created
+        click on bucket name
+            upload
+                add file
+                leave all .
+                uplodad
+
+
+
+S3 bucket website
+    go inside s3 bucket
+        properties
+            static website hosting
+                use this bucket to host website
+                add index doc
+                error .
+                save
+    we will get endpoint of website
+
+     go inside s3 bucket
+        permissions
+        public access setting
+            edit
+            untick both in manage public bucket policies
+            save
+            confirm
+        bucket policies
+        bottom policy generator
+                s3
+                allow
+                principal : *
+                amazon s3
+                get object
+                ARN/* form bucket policy generator
+                add statements
+                generate policy
+                copy and paste inside  bucket policy editor
+                save
+
+
+** AWS CLI configuration :
+    IAM console
+        users
+            click on username
+                security credentials tab
+                create access key
+                download csv file
+
+    now go to your machines terminal
+        aws configure
+        AWS Access Key ID : paste from csv file
+        AWS Secrete Access Key : paste from csv file
+        Default region name : name of your region . remember it or check from aws.
+        Default output format : leave blank . press enter
+
+        how to check done or not : nothing appears
+
+
+
+Adding IAM roles to an Instance :
+    IAM console
+    roles
+        create roles
+            trusted entity
+            EC2
+            next
+            search S3
+            select s3 read only access
+            next
+            role name
+            role desc .
+            next
+    roles : appear the created role
+
+    EC2 console
+        right click
+        instance setting
+        attach replace IAM roles
+        name of our role
+        apply
+
+AWS CLI on EC2 :
+    SSH into ec2
+       aws s3 ls
+
+
+----------------------------------------------------------------
+----------------------------------------------------------------
+
+
+
+ Elastic Bean Hands On :
+
+ Elastic bean console
+ get started
+    name
+    platform
+    code
+    create application
+
+ All applications
+        big green tick
+        URL of application
+    Environments
+        actions
+            swap
+            create
+            restore
+            delete
+
+
+
+
+ Create New Application :
+    web or worker
+    web
+        environment info
+            name
+            name : __-prod
+            domain
+            description
+        base
+            platform
+            code
+    configure more
+        we get whole panel of configurations , modify
+        create environment
+
+ All applications
+         big green tick
+         URL of application
+     Environments
+         actions
+             swap
+             create
+             restore
+             delete
+
+
+Updating the deployments Hands On :
+    All Applications
+        select env
+            left tab configuration
+                deployments
+                    policy
+                    batch
+                configuration updates
+                    leave all unchanged
+                deployment preference
+                    leave all unchanged
+                apply
+
+    big green tick will be there
+    upload and deploy.
+
+
+
+----------------------------------------------------------------
+----------------------------------------------------------------
+
+
+                    -: AWS CLOUD FORMATION :-
+
+
+
+Create Stack :
+    Cloud formation console
+        select region
+        left top blue create stack
+            choose a template
+                upload to S3
+                next
+            Specify name
+                stack name
+                next
+            Options
+                leave all
+                next
+            Review
+                we get URL
+                create
+
+    stack created  by us apprears
+        status create complete
+        events
+            on going operations to create stack
+        resources
+            our created things
+        view/edit in designer
+
+Updating/Delete Stack :
+    Cloud formation console
+    Actions
+        update/Delete
+        all actions from create hands on
+        update/Delete
+
+    stacks
+        status
+            update/Delete complete
+
+    click on resources
+
+
+
+* Cloud formation rollback : if stack creation fails , delete all created resources.
+
+* AWS Monitoring : check my application on aws working properly or not
+
+* CloudWatch matrix : variable to observe
+                    : watch after every 5 min, for 1 min
+
+CloudWatch matrix hands on:
+    cloudWatch console
+        matrix
+            actions
+                add to dashboard
+                    save
+
+
+* CloudWatch Alarms : used to trigger required actions
+                    : data points are  3 values within 15 minutes
+
+* CloudWatch logs   : record of activities
+
+* CloudWatch events : are the rules to trigger a event.
+
+* AWS X ray :  visually watching the workflow of application. used for debugging
+
+* CloudTrail : history of API calls made to our AWS hosted apps
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
